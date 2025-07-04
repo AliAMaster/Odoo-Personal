@@ -12,6 +12,7 @@ class Account(models.Model):
     balance = fields.Monetary("Balance", currency_field="currency", compute='calculate_balance')
     parent_account = fields.Many2one("custom.account", string="Parent Account")
     child_accounts = fields.One2many("custom.account", inverse_name='parent_account', string="Child Accounts")
+    account_type = fields.Many2one("custom.account_type", string="Account Type")
 
     def calculate_balance(self):
         for rec in self:

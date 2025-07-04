@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_custom_account,access.custom.account,model_custom_account,custom_accounting.group_custom_user,1,1,1,1
 access_custom_entry,access.custom.entry,model_custom_entry,custom_accounting.group_custom_user,1,1,1,1
+access_custom_account_type,access.custom.account_type,model_custom_account_type,custom_accounting.group_custom_user,1,1,1,1

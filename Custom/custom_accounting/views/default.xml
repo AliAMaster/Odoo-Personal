@@ -1,7 +1,8 @@
 <odoo>
     <data>
+        <!--Account Default List View-->
         <record id="custom_account_view_tree" model="ir.ui.view">
-            <field name="name">Account.List</field>
+            <field name="name">custom.account.list</field>
             <field name="model">custom.account</field>
             <field name="arch" type="xml">
                 <list string="Account List">
@@ -11,9 +12,9 @@
                 </list>
             </field>
         </record>
-
+        <!--Account Default Form View-->
         <record id="custom_account_view_form" model="ir.ui.view">
-            <field name="name">Account.Form</field>
+            <field name="name">custom.account.form</field>
             <field name="model">custom.account</field>
             <field name="arch" type="xml">
                 <form string="Account Form">
@@ -28,7 +29,10 @@
                         </group>
                         <group>
                             <group>
-                                <field name="parent_account" nolabel="0"/>
+                                <field name="parent_account"/>
+                            </group>
+                            <group>
+                                <field name="account_type"/>
                             </group>
                             <group>
                                 <field name="currency"/>
@@ -49,6 +53,30 @@
                 </form>
             </field>
         </record>
-
+        <!--Account Type Default list view-->
+        <record id="custom_account_type_list_view" model="ir.ui.view">
+            <field name="name">custom.account_type.list</field>
+            <field name="model">custom.account_type</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+        <!--Entry List View-->
+        <record id="custom_entry_view_list" model="ir.ui.view">
+            <field name="name">custom.entry.list</field>
+            <field name="model">custom.entry</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="sequence" string="#"/>
+                    <field name="amount"/>
+                    <field name="currency" string="Currency"/>
+                    <field name="credit_account" string="From"/>
+                    <field name="debit_account" string="To"/>
+                    <field name="remark"/>
+                </list>
+            </field>
+        </record>
     </data>
 </odoo>
