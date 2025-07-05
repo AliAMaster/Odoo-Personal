@@ -68,7 +68,7 @@
             <field name="name">custom.entry.list</field>
             <field name="model">custom.entry</field>
             <field name="arch" type="xml">
-                <list editable="bottom">
+                <list>
                     <field name="sequence" string="#"/>
                     <field name="amount"/>
                     <field name="currency" string="Currency"/>
@@ -76,6 +76,27 @@
                     <field name="debit_account" string="To"/>
                     <field name="remark"/>
                 </list>
+            </field>
+        </record>
+        <!--Entry Form View-->
+        <record id="custom_entry_view_form" model="ir.ui.view">
+            <field name="name">custom.entry.form</field>
+            <field name="model">custom.entry</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="currency" string="Currency"/>
+                            <field name="transaction_date"/>
+                        </group>
+                        <group>
+                            <field name="credit_account" string="From"/>
+                            <field name="debit_account" string="To"/>
+                            <field name="remark"/>
+                        </group>
+                    </group>
+                </form>
             </field>
         </record>
     </data>
