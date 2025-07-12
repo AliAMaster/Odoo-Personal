@@ -8,12 +8,13 @@ class WorkOut(models.Model):
 
     sequence = fields.Char(string="#", readonly=True, copy=False, default="/")
     set = fields.One2many(comodel_name="set", inverse_name="workout")
-    date_time = fields.Datetime("Time", default=lambda: fields.datetime.now(), readonly=True)
+    date_time = fields.Datetime("Time", default=lambda self: fields.datetime.now(), readonly=True)
     location = fields.Many2one(comodel_name="location")
 
     @model
     def create(self, vals_list: list[ValuesType]) -> Self:
-        result = super(WorkOut).create(vals_list)
-        if result['sequence'] == "/":
-            result['sequence'] = self.env['ir.sequence'].next_by_code('workout.sequence')
-        return result
+        records = super().create(vals_list)
+        for record, vals in zip(records, vals_list):
+            if record.sequence == '/':
+                record.sequence = self.env['ir.sequence'].next_by_code('workout.sequence')
+        return records

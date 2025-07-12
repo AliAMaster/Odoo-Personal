@@ -1,7 +1,7 @@
 {
     'name': "Exercise",
     'version': '1.0',
-    'depends': ['base'],
+    'depends': ['base', 'uom'],
     'author': "Ali",
     'category': 'Accounting/Accounting',
     'application': True,

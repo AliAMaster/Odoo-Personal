@@ -58,9 +58,15 @@
         </record>
         <!--Workout Form View-->
         <record id="workout_view_form" model="ir.ui.view">
-            <field name="location"/>
-            <field name="date_time"/>
-            <field name="set" nolabel="1"/>
+            <field name="name">workout.form</field>
+            <field name="model">workout</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="location" nolabel="0"/>
+                    <field name="date_time"/>
+                    <field name="set" nolabel="1"/>
+                </form>
+            </field>
         </record>
     </data>
 </odoo>

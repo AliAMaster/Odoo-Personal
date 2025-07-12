@@ -10,7 +10,7 @@
         <!-- Custom User Group under Custom App -->
         <record id="group_exercise_user" model="res.groups">
             <field name="name">User</field>
-            <field name="category_id" ref="custom_accounting.module_category_custom_app"/>
+            <field name="category_id" ref="exercise.module_category_exercise_app"/>
         </record>
 
     </data>

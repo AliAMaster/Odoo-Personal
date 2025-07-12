@@ -14,7 +14,7 @@ class Set(models.Model):
                                  default=lambda self: self.env.ref('uom.product_uom_kgm'))
     repetition = fields.Integer("Repetition", required=True)
     workout = fields.Many2one(comodel_name="workout")
-    datetime = fields.Datetime(string="date_time", default=lambda: fields.datetime.now(), readonly=True)
+    datetime = fields.Datetime(string="date_time", default=lambda self: fields.datetime.now(), readonly=True)
 
     @api.constrains
     def check_weight_is_empty(self):
