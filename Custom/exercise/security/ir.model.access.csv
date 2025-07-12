@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_muscle_group,access.muscle_group,model_muscle_group,exercise.group_exercise_user,1,1,1,1
+access_exercise,access.exercise,model_exercise,exercise.group_exercise_user,1,1,1,1
+access_set,access.set,model_set,exercise.group_exercise_user,1,1,1,1
+access_workout,access.workout,model_workout,exercise.group_exercise_user,1,1,1,1
+access_location,access.location,model_location,exercise.group_exercise_user,1,1,1,1

@@ -15,7 +15,6 @@ class TransactionEntry(models.Model):
     debit_account = fields.Many2one("custom.account", string="Debit Account", required=True)
     credit_account = fields.Many2one("custom.account", string="Credit Account", required=True)
 
-
     @model
     def create(self, vals_list: list[ValuesType]) -> Self:
         result = super(TransactionEntry).create(vals_list)
