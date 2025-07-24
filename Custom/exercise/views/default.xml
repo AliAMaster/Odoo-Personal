@@ -15,10 +15,22 @@
             <field name="name">exercise.list</field>
             <field name="model">exercise</field>
             <field name="arch" type="xml">
-                <list editable="bottom">
+                <list>
                     <field name="name"/>
                     <field name="muscle_group" widget="many2many_tags"/>
                 </list>
+            </field>
+        </record>
+        <!--Exercise Form View-->
+        <record id="exercise_view_form" model="ir.ui.view">
+            <field name="name">exercise.form</field>
+            <field name="model">exercise</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="name"/>
+                    <field name="muscle_group" widget="many2many_tags"/>
+                    <field name="sets" nolabel="1"/>
+                </form>
             </field>
         </record>
         <!--Gym List View-->
