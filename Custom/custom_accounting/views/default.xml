@@ -53,16 +53,7 @@
                 </form>
             </field>
         </record>
-        <!--Account Type Default list view-->
-        <record id="custom_account_type_list_view" model="ir.ui.view">
-            <field name="name">custom.account_type.list</field>
-            <field name="model">custom.account_type</field>
-            <field name="arch" type="xml">
-                <list editable="bottom">
-                    <field name="name"/>
-                </list>
-            </field>
-        </record>
+
         <!--Entry List View-->
         <record id="custom_entry_view_list" model="ir.ui.view">
             <field name="name">custom.entry.list</field>
