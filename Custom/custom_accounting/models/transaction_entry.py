@@ -1,23 +1,49 @@
-from odoo import models, fields
+from odoo import models, fields, api
 from odoo.api import model, ValuesType, Self
+from odoo.exceptions import ValidationError
 
 
 class TransactionEntry(models.Model):
-    _name = "custom.entry"
-    _description = "Basic Transaction"
-    _order = "sequence"
+	_name = "custom.entry"
+	_description = "Basic Transaction"
+	_order = "sequence"
 
-    sequence = fields.Char(string='#', readonly=True, copy=False, default='/')
-    currency = fields.Many2one("res.currency", string="Currency", required=True)
-    amount = fields.Monetary("Amount", currency_field="currency", required=True)
-    transaction_date = fields.Date("Date")
-    remark = fields.Char("Remarks")
-    debit_account = fields.Many2one("custom.account", string="Debit Account", required=True)
-    credit_account = fields.Many2one("custom.account", string="Credit Account", required=True)
+	sequence = fields.Char(string='#', readonly=True, copy=False, default='/')
+	currency = fields.Many2one("res.currency", string="Currency")
+	amount = fields.Monetary("Amount", currency_field="currency", required=True)
+	transaction_date = fields.Date("Date")
+	remark = fields.Char("Remarks")
+	debit_account = fields.Many2one(
+		"custom.account",
+		string="Debit Account",
+		required=True,
+		domain="[('currency', '=', currency)]"
+	)
+	credit_account = fields.Many2one(
+		"custom.account",
+		string="Credit Account",
+		required=True,
+		domain="[('currency', '=', currency)]"
+	)
 
-    @model
-    def create(self, vals_list: list[ValuesType]) -> Self:
-        result = super(TransactionEntry).create(vals_list)
-        if result['sequence'] == "/":
-            result['sequence'] = self.env['ir.sequence'].next_by_code('custom.entry.seq')
-        return result
+	@model
+	def create(self, vals_list: list[ValuesType]) -> Self:
+		records = super().create(vals_list)
+		for record, vals in zip(records, vals_list):
+			if record.sequence == '/':
+				record.sequence = self.env['ir.sequence'].next_by_code('custom.entry.seq')
+		return records
+
+	@api.onchange('debit_account', 'credit_account')
+	def _onchange_accounts_set_currency(self):
+		for rec in self:
+			if not rec.currency:
+				rec.currency = rec.debit_account.currency or rec.credit_account.currency
+
+	@api.constrains('debit_account', 'credit_account')
+	def _check_account_currency(self):
+		for rec in self:
+			if not rec.debit_account.currency:
+				raise ValidationError("Debit account must have a currency.")
+			if not rec.credit_account.currency:
+				raise ValidationError("Credit account must have a currency.")
