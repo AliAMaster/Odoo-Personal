@@ -1,5 +1,4 @@
-from odoo import models, fields
-from odoo.api import model, ValuesType, Self
+from odoo import models, fields, api
 
 
 class WorkOut(models.Model):
@@ -11,10 +10,9 @@ class WorkOut(models.Model):
     date_time = fields.Datetime("Time", default=lambda self: fields.datetime.now(), readonly=True)
     location = fields.Many2one(comodel_name="location")
 
-    @model
-    def create(self, vals_list: list[ValuesType]) -> Self:
-        records = super().create(vals_list)
-        for record, vals in zip(records, vals_list):
-            if record.sequence == '/':
-                record.sequence = self.env['ir.sequence'].next_by_code('workout.sequence')
-        return records
+    @api.model_create_multi
+    def create(self, vals_list: list):
+        for vals in vals_list:
+            if not vals.get('sequence'):
+                vals['sequence'] = self.env['ir.sequence'].next_by_code('workout.sequence')
+        return super().create(vals_list)

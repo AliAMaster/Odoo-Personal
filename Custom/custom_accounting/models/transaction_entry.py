@@ -8,7 +8,7 @@ class TransactionEntry(models.Model):
 	_description = "Basic Transaction"
 	_order = "sequence"
 
-	sequence = fields.Char(string='#', readonly=True, copy=False, default='/')
+	sequence = fields.Char(string='#', readonly=True, copy=False)
 	currency = fields.Many2one("res.currency", string="Currency")
 	amount = fields.Monetary("Amount", currency_field="currency", required=True)
 	transaction_date = fields.Date("Date")
@@ -26,13 +26,12 @@ class TransactionEntry(models.Model):
 		domain="[('currency', '=', currency)]"
 	)
 
-	@model
-	def create(self, vals_list: list[ValuesType]) -> Self:
-		records = super().create(vals_list)
-		for record, vals in zip(records, vals_list):
-			if record.sequence == '/':
-				record.sequence = self.env['ir.sequence'].next_by_code('custom.entry.seq')
-		return records
+	@api.model_create_multi
+	def create(self, vals_list: list):
+		for vals in vals_list:
+			if not vals.get('sequence'):
+				vals['sequence'] = self.env['ir.sequence'].next_by_code('custom.entry.seq')
+		return super().create(vals_list)
 
 	@api.onchange('debit_account', 'credit_account')
 	def _onchange_accounts_set_currency(self):

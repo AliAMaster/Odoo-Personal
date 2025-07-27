@@ -22,7 +22,7 @@ class Account(models.Model):
 																	  ('asset', 'Asset'),
 																	  ('income', 'Income')])
 
-	@api.depends('debit_entries', 'credit_entries')
+	@api.depends('debit_entries', 'credit_entries', 'child_accounts')
 	def calculate_balance(self):
 		for rec in self:
 			rec.balance = 100
@@ -38,7 +38,7 @@ class Account(models.Model):
 				raise ValidationError("Cannot change to parent account with different currency.")
 
 			if rec.name:
-				rec.name = rec.name[rec.name.rfind("\\")-1:]
+				rec.name = rec.name[rec.name.rfind("\\") + 1:]
 				rec.name = rec.parent_account.name + "\\" + rec.name
 
 	@api.depends('child_accounts')
