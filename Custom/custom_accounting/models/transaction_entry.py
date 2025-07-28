@@ -11,7 +11,7 @@ class TransactionEntry(models.Model):
 	sequence = fields.Char(string='#', readonly=True, copy=False)
 	currency = fields.Many2one("res.currency", string="Currency")
 	amount = fields.Monetary("Amount", currency_field="currency", required=True)
-	transaction_date = fields.Date("Date")
+	transaction_date = fields.Date("Date", required=True)
 	remark = fields.Char("Remarks")
 	debit_account = fields.Many2one(
 		"custom.account",
