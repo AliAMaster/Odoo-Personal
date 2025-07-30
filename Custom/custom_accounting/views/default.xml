@@ -7,8 +7,8 @@
             <field name="arch" type="xml">
                 <list string="Account List">
                     <field name="name"/>
-                    <field name="balance" widget="monetary" options="{'currency_field': 'currency'}"/>
-                    <field name="currency" invisible="1" column_invisible="1"/>
+                    <field name="currency"/>
+                    <field name="account_type"/>
                 </list>
             </field>
         </record>
@@ -25,7 +25,6 @@
                                     <field name="name"/>
                                 </h1>
                             </div>
-                            <field name="balance" widget="monetary" options="{'currency_field': 'currency'}"/>
                         </group>
                         <group>
                             <group>
@@ -48,12 +47,16 @@
                             <page string="Child Accounts">
                                 <field name="child_accounts" nolabel="1" editable="0"/>
                             </page>
+                            <page string="Balance">
+                                <field name="balance" nolabel="1"/>
+                                <button name="rebuild_balances" type="object" string="Rebuild Balance"
+                                        class="btn-primary"/>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
-
         <!--Entry List View-->
         <record id="custom_entry_view_list" model="ir.ui.view">
             <field name="name">custom.entry.list</field>
@@ -88,6 +91,17 @@
                         </group>
                     </group>
                 </form>
+            </field>
+        </record>
+        <!--Balance List View-->
+        <record id="custom_balance_view_list" model="ir.ui.view">
+            <field name="name">custom.account_balnce.list</field>
+            <field name="model">custom.account_balance</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="amount"/>
+                    <field name="currency"/>
+                </list>
             </field>
         </record>
     </data>

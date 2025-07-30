@@ -14,12 +14,18 @@
         <field name="res_model">res.currency</field>
         <field name="view_mode">list,form</field>
     </record>
+    <record id="fd_menu_action" model="ir.actions.act_window">
+        <field name="name">Fixed Deposits</field>
+        <field name="res_model">fixed_deposit</field>
+        <field name="view_mode">list,form</field>
+    </record>
     <menuitem id="custom_accounting" name="Accounting">
         <menuitem id="accounts_menu" name="Accounts">
             <menuitem name="Accounts" id="accounts_sub_menu" action="account_menu_action"/>
-        </menuitem>
-        <menuitem id="entry_menu" name="Entries">
             <menuitem name="Entries" id="entries_sub_menu" action="entry_menu_action"/>
+        </menuitem>
+        <menuitem id="invest_menu" name="Investments">
+            <menuitem name="Fixed Deposits" id="fd_sub_menu" action="fd_menu_action"/>
         </menuitem>
         <menuitem id="config_menu" name="Configuration">
             <menuitem name="Currencies" id="curr_sub_menu" action="curr_menu_action"/>
