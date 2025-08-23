@@ -25,7 +25,8 @@ class FixedDeposit(models.Model):
     _name = "fixed_deposit"
     _description = "Fixed Deposit"
 
-    fd_ref = fields.Many2one(comodel_name="custom.account", string="Reference", required=True)
+    reference = fields.Char(string="Reference", required=True)
+    interim_account = fields.Many2one(comodel_name="custom.account", string="Account", invisible=True)
     credit_account = fields.Many2one(comodel_name="custom.account", string="From", required=True, domain="[('currecny', '=', currency)]")
     debit_account = fields.Many2one(comodel_name="custom.account", string="To", required=True, domain="[('currecny', '=', currency)]")
 
@@ -44,27 +45,28 @@ class FixedDeposit(models.Model):
     start_entry = fields.Many2one(comodel_name="custom.entry", string="Start Entry")
     end_entry = fields.Many2one(comodel_name="custom.entry", string="End Entry")
 
-    @api.onchange('credit_account', 'debit_account', 'interim_account')
-    def _onchange_accounts_set_currency(self):
-        for rec in self:
-            if not rec.currency:
-                rec.currency = rec.debit_account.currency or rec.credit_account.currency
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            acc = self.env['custom.account'].create([{'name': vals.get('reference'), 'currecncy': vals.get('currency'), 'parent_account': vals.get('credit_account')}])
+            vals['interim_account'] = acc
+        return super().create(vals_list)
 
     @api.onchange('credit_account', 'debit_account')
     def _onchange_c_d_account_set(self):
         for rec in self:
             if not rec.credit_account:
                 rec.credit_account = rec.debit_account
-                rec.fd_ref.parent_account = rec.debit_account
             if not rec.debit_account:
                 rec.debit_account = rec.credit_account
-                rec.fd_ref.parent_account = rec.credit_account
+            if not rec.currency:
+                rec.currency = rec.debit_account.currency or rec.credit_account.currency
 
     @api.onchange('start_date')
     def _set_start_state(self):
         for rec in self:
-            if rec.dur_change == 'end' or ((rec.dur_years == 0 and rec.dur_months == 0 and rec.dur_days == 0) and rec.end_date):
-                delta = rec.end_date - rec.start_date
+            if rec.dur_change == 'end' or ((rec.dur_years == 0 and rec.dur_months == 0 and rec.dur_days == 0) and rec.end_date and rec.start_date):
+                delta = relativedelta(rec.end_date, rec.start_date)
                 rec.dur_years = delta.years
                 rec.dur_months = delta.months
                 rec.dur_days = delta.days
@@ -75,8 +77,8 @@ class FixedDeposit(models.Model):
     @api.onchange('end_date')
     def _set_end_state(self):
         for rec in self:
-            if rec.dur_change == 'start' or ((rec.dur_years == 0 and rec.dur_months == 0 and rec.dur_days == 0) and rec.start_date):
-                delta = rec.end_date - rec.start_date
+            if rec.dur_change == 'start' or ((rec.dur_years == 0 and rec.dur_months == 0 and rec.dur_days == 0) and rec.end_date and rec.start_date):
+                delta = relativedelta(rec.end_date, rec.start_date)
                 rec.dur_years = delta.years
                 rec.dur_months = delta.months
                 rec.dur_days = delta.days
@@ -96,5 +98,5 @@ class FixedDeposit(models.Model):
     @api.onchange('start_amount', 'return_amount', 'start_date', 'end_date')
     def _set_pa(self):
         for rec in self:
-            if rec.start_date and rec.end_date:
+            if rec.start_date and rec.end_date and rec.start_amount and rec.return_amount:
                 years = calc_dur(rec.start_date, rec.end_date)
