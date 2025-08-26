@@ -48,7 +48,7 @@
                                 <field name="child_accounts" nolabel="1" editable="0"/>
                             </page>
                             <page string="Balance">
-                                <field name="balance" nolabel="1"/>
+                                <field name="balance" nolabel="1" mode="list" readonly="1" context="{'create': False, 'delete': False}"/>
                                 <button name="rebuild_balances" type="object" string="Rebuild Balance"
                                         class="btn-primary"/>
                             </page>
@@ -95,10 +95,10 @@
         </record>
         <!--Balance List View-->
         <record id="custom_balance_view_list" model="ir.ui.view">
-            <field name="name">custom.account_balnce.list</field>
+            <field name="name">custom.account_balance.list</field>
             <field name="model">custom.account_balance</field>
             <field name="arch" type="xml">
-                <list>
+                <list create="false" delete="false" edit="false">
                     <field name="amount"/>
                     <field name="currency"/>
                 </list>
