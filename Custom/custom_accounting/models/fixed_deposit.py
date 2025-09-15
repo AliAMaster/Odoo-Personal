@@ -70,9 +70,9 @@ class FixedDeposit(models.Model):
                 rec.dur_years = delta.years
                 rec.dur_months = delta.months
                 rec.dur_days = delta.days
-            else:
+                rec.dur_change = "start"
+            elif rec.dur_change == "start":
                 rec.end_date = rec.start_date + relativedelta(years=rec.dur_years, months=rec.dur_months, days=rec.dur_days)
-            rec.dur_change = 'start'
 
     @api.onchange('end_date')
     def _set_end_state(self):
@@ -91,8 +91,10 @@ class FixedDeposit(models.Model):
         for rec in self:
             if rec.dur_change:
                 if rec.dur_change == "start":
+                    rec.dur_change = "start-dur"
                     rec.end_date = rec.start_date + relativedelta(years=rec.dur_years, months=rec.dur_months, days=rec.dur_days)
                 elif rec.dur_change == 'end':
+                    rec.dur_change = "end-dur"
                     rec.start_date = rec.end_date - relativedelta(years=rec.dur_years, months=rec.dur_months, days=rec.dur_days)
 
     @api.onchange('start_amount', 'return_amount', 'start_date', 'end_date')
